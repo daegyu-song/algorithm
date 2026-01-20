@@ -1,4 +1,4 @@
-package programmers.level1;
+package level1;
 
 // 프로그래머스 Lv.1 가장 많이 받은 선물
 class May12th {

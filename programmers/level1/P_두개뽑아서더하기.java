@@ -1,6 +1,6 @@
-package programmers.level1;
+package level1;
 
-import java.util.*;
+import java.util.TreeSet;
 
 public class P_두개뽑아서더하기 {
     public int[] solution(int[] numbers) {

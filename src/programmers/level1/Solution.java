@@ -1,4 +1,4 @@
-package programmers.lv1;
+package programmers.level1;
 
 // 프로그래머스 Lv.1 유연 근무제
 class April30th {

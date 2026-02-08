@@ -5,38 +5,22 @@ import java.util.*;
 
 public class S_규영이와인영이의카드게임 {
 
-    static boolean[] card = new boolean[19], visited;
+    static boolean[] card = new boolean[19], visited = new boolean[9];
     static int[] aCard = new int[9], bCard = new int[9];
-    static int win, lose, aSum, bSum;
+    static int win, lose;
+
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static StringBuilder sb = new StringBuilder();
+    static StringTokenizer st;
 
     public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
         int T = Integer.parseInt(br.readLine());
 
-        StringBuilder sb = new StringBuilder();
         for (int tc = 1; tc <= T; tc++) {
-            StringTokenizer st = new StringTokenizer(br.readLine());
-            for (int i = 0; i < 9; i++) {
-                int num = Integer.parseInt(st.nextToken());
-                card[num] = true;
-                aCard[i] = num;
-            }
 
-            int idx = 0;
-            for (int i = 1; i <= 18; i++) {
-                if (!card[i]) bCard[idx++] = i;
-            }
-
-
-            aSum = 0;
-            bSum = 0;
-            win = 0;
-            lose = 0;
-            visited = new boolean[9];
-
-            dfs(0);
-
-            Arrays.fill(card, false);
+            init();
+            process(0, 0, 0);
 
             sb.append("#").append(tc).append(" ");
             sb.append(lose).append(" ").append(win).append("\n");
@@ -45,26 +29,44 @@ public class S_규영이와인영이의카드게임 {
         System.out.println(sb);
     }
 
-    static void dfs(int i) {
+    static void process(int idx, int aSum, int bSum) {
 
-        if (i == 9) {
+        if (idx == 9) {
             if (aSum > bSum) lose++;
             else if (aSum < bSum) win++;
             return;
         }
 
         for (int j = 0; j < 9; j++) {
+
             if (visited[j]) continue;
 
-            if (aCard[i] < bCard[j]) bSum += aCard[i] + bCard[j];
-            else if (aCard[i] > bCard[j]) aSum += aCard[i] + bCard[j];
             visited[j] = true;
 
-            dfs(i + 1);
+            process(
+                    idx + 1,
+                    aCard[idx] < bCard[j] ? aSum : aSum + aCard[idx] + bCard[j],
+                    aCard[idx] < bCard[j] ? bSum + aCard[idx] + bCard[j] : bSum);
 
-            if (aCard[i] < bCard[j]) bSum -= aCard[i] + bCard[j];
-            else if (aCard[i] > bCard[j]) aSum -= aCard[i] + bCard[j];
             visited[j] = false;
         }
+    }
+
+    static void init() throws IOException {
+        st = new StringTokenizer(br.readLine());
+        for (int i = 0; i < 9; i++) {
+            int num = Integer.parseInt(st.nextToken());
+            card[num] = true;
+            aCard[i] = num;
+        }
+
+        int idx = 0;
+        for (int i = 1; i <= 18; i++) {
+            if (!card[i]) bCard[idx++] = i;
+        }
+
+        Arrays.fill(card, false);
+        win = 0;
+        lose = 0;
     }
 }

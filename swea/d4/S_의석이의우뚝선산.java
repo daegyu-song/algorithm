@@ -4,7 +4,7 @@ import java.util.*;
 
 public class S_의석이의우뚝선산 {
 
-    static int N, mountCnt;
+    static int N, cnt;
     static int[] field;
 
     static StringBuilder sb = new StringBuilder();
@@ -16,41 +16,40 @@ public class S_의석이의우뚝선산 {
             init();
             process();
 
-            sb.append("#").append(tc).append(" ").append(mountCnt).append("\n");
+            sb.append("#").append(tc).append(" ").append(cnt).append("\n");
         }
 
         System.out.println(sb);
     }
 
     static void process() {
-        int p1 = 0, p2 = 0, h = 0;
-        boolean flag = false;
-
-        for (int i = 1; i < field.length; i++) {
-            if (field[i] < field[i - 1]) {
-
-                if (!flag) {
-                    h = i - 1;
-                    flag = true;
+        for (int i = 1; i < N - 1; i++) {
+            if (field[i - 1] < field[i] && field[i] > field[i + 1]) {
+                int leftCnt = 1;
+                for (int j = i - 2; j >= 0; j--) {
+                    if (field[j] > field[j + 1]) break;
+                    leftCnt++;
                 }
 
-                p2 = i;
-                if (i + 1 >= field.length || field[i + 1] > field[i]) {
-                    mountCnt += (h - p1) * (p2 - h);
-                    p1 = p2;
-                    flag = false;
+                int rightCnt = 1;
+                for (int j = i + 2; j < N; j++) {
+                    if (field[j - 1] < field[j]) break;
+                    rightCnt++;
                 }
+
+                cnt += leftCnt * rightCnt;
             }
         }
     }
 
     static void init() {
         N = sc.nextInt();
+
         field = new int[N];
-        for (int i = 0; i < field.length; i++) {
+        for (int i = 0; i < N; i++) {
             field[i] = sc.nextInt();
         }
 
-        mountCnt = 0;
+        cnt = 0;
     }
 }

@@ -5,10 +5,9 @@ import java.util.*;
 
 public class S_농작물수확하기 {
 
-    static int N, sum;
+    static int N, sr, sc, distance, sum;
     static int[][] field;
 
-    static StringTokenizer st;
     static StringBuilder sb = new StringBuilder();
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
@@ -25,12 +24,9 @@ public class S_농작물수확하기 {
     }
 
     static void process() {
-
-        int min = N / 2;
-
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
-                if (Math.abs(i - min) + Math.abs(j - min) <= min) sum += field[i][j];
+                if (Math.abs(i - sr) + Math.abs(j - sc) <= distance) sum += field[i][j];
             }
         }
     }
@@ -38,7 +34,6 @@ public class S_농작물수확하기 {
     static void init() throws IOException {
         N = Integer.parseInt(br.readLine());
         field = new int[N][N];
-
         for (int i = 0; i < N; i++) {
             String str = br.readLine();
             for (int j = 0; j < N; j++) {
@@ -46,6 +41,7 @@ public class S_농작물수확하기 {
             }
         }
 
+        sr = sc = distance = N / 2;
         sum = 0;
     }
 }

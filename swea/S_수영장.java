@@ -4,7 +4,7 @@ import java.util.*;
 public class S_수영장 {
 
     static int min;
-    static int[] price, day;
+    static int[] money = new int[4], plan = new int[12];
 
     static StringTokenizer st;
     static StringBuilder sb = new StringBuilder();
@@ -22,35 +22,33 @@ public class S_수영장 {
         System.out.println(sb);
     }
 
-    static void process(int month, int sum) {
+    static void process(int cnt, int sum) {
+        if (min <= sum) return;
 
-        if (sum >= min) return;
-
-        if (month >= 12) {
+        if (cnt >= 12) {
             min = sum;
+
             return;
         }
 
-        process(month + 1, sum + price[0] * day[month]);
+        process(cnt + 1, sum + money[0] * plan[cnt]);
 
-        process(month + 1, sum + price[1]);
+        process(cnt + 1, sum + money[1]);
 
-        process(month + 3, sum + price[2]);
+        process(cnt + 3, sum + money[2]);
     }
 
     static void init() throws IOException {
-        price = new int[4];
         st = new StringTokenizer(br.readLine());
-        for (int i = 0; i < price.length; i++) {
-            price[i] = Integer.parseInt(st.nextToken());
+        for (int i = 0; i < 4; i++) {
+            money[i] = Integer.parseInt(st.nextToken());
         }
 
-        day = new int[12];
         st = new StringTokenizer(br.readLine());
-        for (int i = 0; i < day.length; i++) {
-            day[i] = Integer.parseInt(st.nextToken());
+        for (int i = 0; i < 12; i++) {
+            plan[i] = Integer.parseInt(st.nextToken());
         }
 
-        min = price[3];
+        min = money[3];
     }
 }

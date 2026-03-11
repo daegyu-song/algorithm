@@ -1,35 +1,26 @@
 package d4;
+
 import java.io.*;
 import java.util.*;
 
-public class S_1251_하나로 {
-
-    static class Node {
-
-        int r, c;
-
-        Node(int r, int c) {
-            this.r = r;
-            this.c = c;
-        }
-    }
+public class S_1251_하나로_V1 {
 
     static class Edge {
 
-        int start, end;
-        double weight;
+        int from, to;
+        long weight;
 
-        Edge(int start, int end, double weight) {
-            this.start = start;
-            this.end = end;
+        Edge(int from, int to, long weight) {
+            this.from = from;
+            this.to = to;
             this.weight = weight;
         }
     }
 
-    static int N, cnt;
+    static int N;
     static int[] x, y, parents;
-    static double E, result;
-    static Node[] nodes;
+    static long result;
+    static double E;
     static Edge[] edges;
 
     static StringTokenizer st;
@@ -42,20 +33,20 @@ public class S_1251_하나로 {
             init();
             process();
 
-            sb.append("#").append(tc).append(" ").append(Math.round(result)).append("\n");
+            sb.append("#").append(tc).append(" ").append(Math.round(result * E)).append("\n");
         }
 
         System.out.println(sb);
     }
 
     static void process() {
-        for (Edge edge : edges) {
-            if (union(edge.start, edge.end)) {
-                cnt++;
-                result += edge.weight;
-            }
+        int cnt = 0;
 
-            if (cnt == N - 1) break;
+        for (Edge edge : edges) {
+            if (!union(edge.from, edge.to)) continue;
+
+            result += edge.weight;
+            if (++cnt == N - 1) break;
         }
     }
 
@@ -65,19 +56,12 @@ public class S_1251_하나로 {
 
         if (ra == rb) return false;
 
-        if (parents[ra] <= parents[rb]) {
-            parents[ra] += parents[rb];
-            parents[rb] = ra;
-        } else {
-            parents[rb] += parents[ra];
-            parents[ra] = rb;
-        }
-
+        parents[rb] = ra;
         return true;
     }
 
     static int find(int a) {
-        if (parents[a] < 0) return a;
+        if (parents[a] == a) return a;
         return parents[a] = find(parents[a]);
     }
 
@@ -86,38 +70,32 @@ public class S_1251_하나로 {
 
         x = new int[N];
         st = new StringTokenizer(br.readLine());
-        for (int i = 0; i < x.length; i++) {
+        for (int i = 0; i < N; i++) {
             x[i] = Integer.parseInt(st.nextToken());
         }
 
         y = new int[N];
         st = new StringTokenizer(br.readLine());
-        for (int i = 0; i < y.length; i++) {
+        for (int i = 0; i < N; i++) {
             y[i] = Integer.parseInt(st.nextToken());
         }
 
         E = Double.parseDouble(br.readLine());
 
-        nodes = new Node[N];
-        for (int i = 0; i < N; i++) {
-            nodes[i] = new Node(x[i], y[i]);
-        }
-
         edges = new Edge[N * (N - 1) / 2];
         for (int i = 0, idx = 0; i < N; i++) {
             for (int j = i + 1; j < N; j++) {
-                edges[idx++] = new Edge(i, j, (Math.pow(nodes[i].r - nodes[j].r, 2) + Math.pow(nodes[i].c - nodes[j].c, 2)) * E);
+                edges[idx++] = new Edge(i, j, (long)(Math.pow(x[i] - x[j], 2) + Math.pow(y[i] - y[j], 2)));
             }
         }
 
-        Arrays.sort(edges, (e1, e2) -> Double.compare(e1.weight, e2.weight));
+        Arrays.sort(edges, (e1, e2) -> Long.compare(e1.weight, e2.weight));
 
         parents = new int[N];
         for (int i = 0; i < N; i++) {
-            parents[i] = -1;
+            parents[i] = i;
         }
 
-        cnt = 0;
         result = 0;
     }
 }

@@ -3,22 +3,22 @@ package d4;
 import java.io.*;
 import java.util.*;
 
-public class S_3124_최소스패닝트리 {
+public class S_3124_최소스패닝트리_V1 {
 
     static class Edge {
 
-        int start, end, weight;
+        int from, to, weight;
 
-        Edge(int start, int end, int weight) {
-            this.start = start;
-            this.end = end;
+        Edge(int from, int to, int weight) {
+            this.from = from;
+            this.to = to;
             this.weight = weight;
         }
     }
 
-    static int V, E, cnt;
-    static long answer;
+    static int V, E;
     static int[] parents;
+    static long result;
     static Edge[] edges;
 
     static StringTokenizer st;
@@ -31,26 +31,20 @@ public class S_3124_최소스패닝트리 {
             init();
             process();
 
-            sb.append("#").append(tc).append(" ").append(answer).append("\n");
+            sb.append("#").append(tc).append(" ").append(result).append("\n");
         }
 
         System.out.println(sb);
     }
 
     static void process() {
+        int cnt = 0;
         for (Edge edge : edges) {
-            if (union(edge.start, edge.end)) {
-                cnt++;
-                answer += edge.weight;
-            }
+            if (!union(edge.from, edge.to)) continue;
 
-            if (cnt == V - 1) break;
+            result += edge.weight;
+            if (++cnt == V - 1) break;
         }
-    }
-
-    static int find(int a) {
-        if (parents[a] < 0) return a;
-        return parents[a] = find(parents[a]);
     }
 
     static boolean union(int a, int b) {
@@ -59,15 +53,13 @@ public class S_3124_최소스패닝트리 {
 
         if (ra == rb) return false;
 
-        if (parents[ra] <= parents[rb]) {
-            parents[ra] += parents[rb];
-            parents[rb] = ra;
-        } else {
-            parents[rb] += parents[ra];
-            parents[ra] = rb;
-        }
-
+        parents[rb] = ra;
         return true;
+    }
+
+    static int find(int a) {
+        if (parents[a] == a) return a;
+        return parents[a] = find(parents[a]);
     }
 
     static void init() throws IOException {
@@ -75,22 +67,23 @@ public class S_3124_최소스패닝트리 {
         V = Integer.parseInt(st.nextToken());
         E = Integer.parseInt(st.nextToken());
 
-        cnt = 0;
-        answer = 0;
-
-        parents = new int[V + 1];
-        Arrays.fill(parents, -1);
-
         edges = new Edge[E];
-        for (int i = 0; i < E; i++) {
+        for (int i = 0; i < edges.length; i++) {
             st = new StringTokenizer(br.readLine());
-            int start = Integer.parseInt(st.nextToken());
-            int end = Integer.parseInt(st.nextToken());
+            int from = Integer.parseInt(st.nextToken());
+            int to = Integer.parseInt(st.nextToken());
             int weight = Integer.parseInt(st.nextToken());
 
-            edges[i] = new Edge(start, end, weight);
+            edges[i] = new Edge(from, to, weight);
         }
 
         Arrays.sort(edges, (e1, e2) -> Integer.compare(e1.weight, e2.weight));
+
+        parents = new int[V + 1];
+        for (int i = 1; i < parents.length; i++) {
+            parents[i] = i;
+        }
+
+        result = 0;
     }
 }

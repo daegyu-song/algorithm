@@ -25,7 +25,7 @@ public class B_9095_123더하기_V2 {
         dp[2] = 2;
         dp[3] = 4;
 
-        for (int i = 3; i < dp.length; i++) {
+        for (int i = 4; i < dp.length; i++) {
             dp[i] = dp[i - 3] + dp[i - 2] + dp[i - 1];
         }
     }
